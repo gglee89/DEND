@@ -48,13 +48,13 @@ CREATE TABLE IF NOT EXISTS staging_events (
 
 staging_songs_table_create = ("""
 CREATE TABLE IF NOT EXISTS staging_songs (    
-    artist_id VARCHAR NOT NULL,
+    artist_id VARCHAR,
     artist_latitude REAL,
     artist_longitude REAL,
     artist_location VARCHAR,
     artist_name VARCHAR,    
     duration FLOAT,
-    num_songs INTEGER NOT NULL,
+    num_songs INTEGER,
     song_id VARCHAR,
     title VARCHAR,    
     year INTEGER
@@ -160,7 +160,7 @@ songplay_table_insert = (""" INSERT INTO songplay_fact
                 se.location as location,
                 se.user_agent as user_agent
     FROM staging_events se
-    JOIN staging_songs ss ON se.song = ss.title AND se.artist = ss.artist_name;
+    JOIN staging_songs ss ON se.song = ss.title AND se.artist = ss.artist_name AND se.length = ss.duration;
 """)
 
 user_table_insert = ("""
