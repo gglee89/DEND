@@ -47,7 +47,7 @@ def process_song_data(spark, input_data, output_data):
                         s.year,
                         s.duration
                    FROM song_table as s
-                  WHERE stb.song_id IS NOT NULL
+                  WHERE s.song_id IS NOT NULL
     """)
 
     # writes them to partitioned parquet files in table directories on S3.
