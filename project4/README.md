@@ -17,25 +17,24 @@ The source data resides in S3 and needs to be processed in Sparkify's data wareh
 # File Structure
 
 ```sh
-/dags
-  udac_example_dag.py
-/data
-  log_data.zip
-  song_data.zip
+/airflow
+  /dags
+    pysparkify_etl_dag.py   [Airflow] Main DAG
+  /plugins
+    /helpers
+      __init__.py
+      sql_queries.py        [Airflow] Insert SQL Queries
+    /operators
+      __init__.py
+      data_quality.py       [Airflow] Quality Operator
+      load_dimension.py     [Airflow] Load Operator
+      load_fact.py          [Airflow] Load Operator
+      stage_redshift.py     [Airflow] S3toRedshift Operator
+    __init__.py
+create_tables.py            Contains the table creation flow
+sql_queries.py              Contains all the SQL QUERIES
 /notes
-  README.md
-/plugins
-  /helpers
-    __init__.py
-    sql_queries.py
-  /operators
-    __init__.py
-    data_quality.py
-    load_dimension.py
-    load_fact.py
-    stage_redshift.py
-  __init__.py
-create_tables.sql
+  README.md                 (Optional) Points from the DEND lesson on Airflow
 ```
 
 # Tasks
