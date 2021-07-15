@@ -22,25 +22,25 @@ drop_tables = [
 
 staging_events_table_create = """
     CREATE TABLE IF NOT EXISTS staging_events (
-                 artist         VARCHAR,
-                 auth           VARCHAR,
-                 firstName      VARCHAR,
-                 gender         VARCHAR,
-                 itemInSession  VARCHAR,
-                 lastName       VARCHAR,
-                 length         NUMERIC,
-                 level          VARCHAR,
-                 location       VARCHAR,
-                 method         VARCHAR,
-                 page           VARCHAR,
-                 registration   BIGINT,
-                 sessionId      INTEGER,
-                 song           VARCHAR,
-                 status         INTEGER,
-                 ts             TIMESTAMP,
-                 userAgent      VARCHAR,
-                 userId         INTEGER
-    );                 
+                 artist             VARCHAR,
+                 auth               VARCHAR,
+                 firstName          VARCHAR,
+                 gender             VARCHAR,
+                 itemInSession      VARCHAR,
+                 lastName           VARCHAR,
+                 length             NUMERIC,
+                 level              VARCHAR,
+                 location           VARCHAR,
+                 method             VARCHAR,
+                 page               VARCHAR,
+                 registration       BIGINT,
+                 sessionId          INTEGER,
+                 song               VARCHAR,
+                 status             INTEGER,
+                 ts                 TIMESTAMP,
+                 userAgent          VARCHAR,
+                 userId             INTEGER
+    );
 """
 
 staging_songs_table_create = """
@@ -128,4 +128,3 @@ create_tables = [
     time_table_create,
     songplay_table_create
 ]
-
