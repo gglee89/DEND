@@ -97,7 +97,18 @@ run_quality_checks = DataQualityOperator(
     task_id='Run_data_quality_checks',
     dag=dag,
     redshift='redshift',
-    tables=['songplay_fact', 'user_dim', 'song_dim', 'artist_dim', 'time_dim']
+    dq_checks = [
+        {
+            'check_sql': "SELECT COUNT(*) FROM user_dim WHERE user_id is null",
+            'expected_result': 0,
+            'description': "null values found in user_dim.user_id column"
+        },
+        {
+            'check_sql': "SELECT COUNT(*) FROM song_dim WHERE song_id is null",
+            'expected_result': 0,
+            'description': "null values found in song_dim.song_id column"
+        }
+    ]
 )
 
 end_operator = DummyOperator(task_id='Stop_execution',  dag=dag)

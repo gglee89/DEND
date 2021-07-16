@@ -9,29 +9,43 @@ class DataQualityOperator(BaseOperator):
     @apply_defaults
     def __init__(self,
                  redshift='',
-                 tables = [],
+                 dq_checks = [],
                  *args, **kwargs):
 
         super(DataQualityOperator, self).__init__(*args, **kwargs)
         self.redshift = redshift
-        self.tables = tables
+        self.dq_checks = dq_checks
 
     def execute(self, context):
-        self.log.info('DATAQUALITY CHECK...')
+        self.log.info('DATA QUALITY CHECK - STARTED')
 
         redshift = PostgresHook(postgres_conn_id=self.redshift)
+      
+        ## LOOP THROUGH VALIDATIONS
+        tests_with_error = []
+        for dq_check in self.dq_checks:                
+            sql = dq_check.get('check_sql')
+            expected_result = dq_check.get('expected_result')
+            description = dq_check.get('description')
 
-        for table in self.tables:
-          ## COLUMNS
-          columns = redshift.get_records("SELECT COUNT(*) FROM {}".format(table))
-          if len(columns) < 1 or len(columns[0]) < 1:
-            self.log.error("{} has no results". format(table))
-            raise ValueError("DATAQUALITY FAILED. {} has no data.".format(table))
-          
-          ## RECORDS
-          num_records = columns[0][0]
-          if num_records == 0:
-            self.log.error("DATAQUALITY FAILED. {} has no records.".format(table))
-            raise ValueError("DATAQUALITY FAILED. {} has no records.".format(table))
+            self.log.info(f"DATA QUALITY CHECK - TEST: {sql} / {expected_result}")
 
-          self.log.info("DATAQUALITY passed. Table: {} with {} records.".format(table, num_records))
+            ## RESULT
+            result = redshift.get_records(sql)[0]
+            if expected_result != result[0]:
+                tests_with_error.append(
+                  "ASSERT {}. EXPECTED {} instead got {}".format(
+                    description, 
+                    expected_result,
+                    result[0])
+                )
+            else:
+              self.log.info("DATA QUALITY CHECK - PASSED. SQL: {} with {} records.".format(sql, result[0]))
+
+        if len(tests_with_error) > 0:
+          self.log.error("TESTS WITH ERROR")
+          self.log.error(tests_with_error)
+          raise ValueError("DATA QUALITY FAILED.")
+
+        self.log.info("DATA QUALITY CHECK - COMPLETED")
+
