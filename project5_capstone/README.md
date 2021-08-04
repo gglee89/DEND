@@ -45,9 +45,9 @@ This project intends to demonstrate the combination of knowledge gained througho
 - **I94 Immigration data**
   - This data comes from the US National Tourism and Trade Office. A data dictionary is included in the workspace. This is where the data comes from. There's a sample file so you can take a look at the data in csv format before reading it all in. You do not have to use the entire dataset, just use what you need to accomplish the goal you set at the beginning of the project.
 - **World Temperature Data**
-  - This dataset came from Kaggle
+  - This dataset came from Kaggle. You can read more about it [here](https://www.kaggle.com/berkeleyearth/climate-change-earth-surface-temperature-data)
 - **U.S. City Demographic Data**
-  - This data comes from OpenSoft.
+  - This data comes from OpenSoft. You can read more about it [here](https://public.opendatasoft.com/explore/dataset/us-cities-demographics/export/)
 - **Airport Code Table**
   - This is a simple table of airport codes and corresponding cities.
 

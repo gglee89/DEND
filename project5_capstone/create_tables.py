@@ -1,14 +1,26 @@
+import configparser
+import sys
 import psycopg2
-from sql_queries import create_tables, drop_tables
+import sql_queries
 
-def create_database():
+def connect_db():
     """
         Connects to DB (AWS Redshift)
         
         :return: DB Connection
     """
+    config = configparser.ConfigParser()
+    config.read_file(open('config/dwh.cfg'))
+    con = psycopg2.connect(
+      "host={} dbname={} user={} password={} port={}".format(*config['CLUSTER'].values())
+    )
+    cur = con.cursor()
     
+    con.close()
     
+    return cur, con
+    
+
 def drop_tables(con, cur):
     """
         Drop tables in DB
@@ -16,7 +28,16 @@ def drop_tables(con, cur):
         :param con: DB Connection
         :param cur: DB Cursor
     """
-    
+    try:
+      for query in sql_queries.drop_tables:
+        cur.execute(query)
+        con.commit()
+    except TypeError as e:
+      print("TypeError {}".format(e))
+    except:
+      print("Unexpected error:", sys.exc_info()[0])
+      raise
+
 
 def create_tables(con, cur):
     """
@@ -25,6 +46,15 @@ def create_tables(con, cur):
         :param con: DB Connection
         :param cur: DB Cursor
     """
+    try:
+      for query in sql_queries.create_tables:
+        cur.execute(query)
+        con.commit()
+    except TypeError as e:
+      print("TypeError {}".format(e))
+    except:
+      print("Unexpected error:", sys.exc_info()[0])
+      raise
     
     
 def main():
@@ -34,8 +64,7 @@ def main():
         - [Redshift] drop existing tables
         - [Redshift] create tables if it doesn't exist
     """
-    con = connect_db()
-    cur = con.cursor()
+    cur, con = connect_db()    
     
     drop_tables(con, cur)
     create_tables(con, cur)
@@ -43,5 +72,5 @@ def main():
     con.close()
     
     
-if __name__ == "__main__"":
+if __name__ == "__main__":
     main()
