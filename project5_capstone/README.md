@@ -58,8 +58,110 @@ This project intends to demonstrate the combination of knowledge gained througho
 # File Structure
 
 ```sh
+/config
+  dwh.cfg                 # Configuration files for DB access
+Captone Project.ipynb     # Jupyter notebook project
+create_tables.py          # Python document for Table creation
+sql_queries.py            # Python with DROP, CREATE, and INSERT queries
 README.md                 # Documentation
 ```
+
+# Data dictionary
+
+#### airport_dim
+
+| Attribute    | Description                                                   |
+| ------------ | ------------------------------------------------------------- |
+| iata_code    | International Air Transport Association - Location identifier |
+| name         | Airport name                                                  |
+| city         | Airport city                                                  |
+| state        | Airport state                                                 |
+| type         | Airport type                                                  |
+| local_code   | Airport local_code                                            |
+| coordinates  | Airport coordinates                                           |
+| elevation_ft | Airport elevation_ft                                          |
+| continent    | Airport continent                                             |
+| iso_country  | Airport ISO Country                                           |
+| iso_region   | Airport ISO Region                                            |
+| municipality | Airport municipality                                          |
+| gps_code     | Airport GPS Code                                              |
+
+#### demographic_dim
+
+| Attribute              | Description                                |
+| ---------------------- | ------------------------------------------ |
+| city                   | US City                                    |
+| state                  | US State                                   |
+| median_age             | US Median Age by City / State              |
+| male_population        | US Male population by City / State         |
+| female_population      | US Female population by City / State       |
+| total_population       | US Total population by City / State        |
+| number_of_veterans     | US number_of_veterans by City / State      |
+| foreign_born           | foreign_born by City / State               |
+| average_household_size | The average household size by City / State |
+| state_code             | The state code                             |
+| race                   | Ethnicity                                  |
+| count                  | Total count                                |
+
+#### temperature_dim
+
+| Attribute                       | Description                                         |
+| ------------------------------- | --------------------------------------------------- |
+| timestamp                       | Timestamp                                           |
+| average_temperature             | Average temperature by City and Country             |
+| average_temperature_uncertainty | Average temperature uncertainty by City and Country |
+| city                            | City                                                |
+| country                         | Country                                             |
+| latitude                        | Latitude by City and Country                        |
+| longitude                       | Longitude by City and Country                       |
+
+#### immigration_fact
+
+| Attribute | Description                                                                           |
+| --------- | ------------------------------------------------------------------------------------- |
+| cicid     | ID from SAS file                                                                      |
+| year      | 4 digit year                                                                          |
+| month     | Numeric month                                                                         |
+| cit       | 3 digit code of source city for immigration (Born country)                            |
+| res       | 3 digit code of source country for immigration (Residence country)                    |
+| iata      | i94 port admitted through                                                             |
+| arrdate   | Arrival date in the USA                                                               |
+| mode      | Mode of transportation (1 = Air; 2 = Sea; 3 = Land; 9 = Not reported)                 |
+| addr      | State of arrival                                                                      |
+| depdate   | Departure date                                                                        |
+| bir       | Age of respondents in Years                                                           |
+| visa      | Visa codes collapsed into three categories: (1 = Business; 2 = Pleasure; 3 = Student) |
+| count     | Total count                                                                           |
+| dtadfile  | Character date field                                                                  |
+| entdepa   | Arrival flag. Whether admitted or paroled into the US                                 |
+| entdepd   | Departure flag. Update of Visa, either apprehend, overstayed, or updated to PR        |
+| matflag   | Match flag                                                                            |
+| biryear   | 4 digit year of birth                                                                 |
+| dtaddto   | Character date field to when admitted in the US                                       |
+| gender    | Gender                                                                                |
+| airline   | Airline used to arrive in the US                                                      |
+| admnum    | Admission number, should be unique and not nullable                                   |
+| fltno     | Flight number or Airline used to arrive in the US                                     |
+| visatype  | Class of admission legally admitting the non-immigrant to temporarily stay in the US  |
+
+#
+
+# Project write up
+
+**Rationaly for the choice of tools and technologies for the project**
+Pandas, numpy, psycopg2 are the python modules used to extract, manipulate, and store the data into POSTGRESQL
+
+**How often the data should be update and why**
+Weekly updates is recommended as it may provide weekly aggregations and reports of the US immigrations status
+
+**If the data was increase by 100x**
+Storing the data in S3 buckets to save costs, and making use of AWS EMR with Spark to parallelize the processing of files big enough that it consumes most processing resources of the uniquely allocated CPU.
+
+**If the data populates a dashboard that must be updated on a daily basis by 7am every day**
+Use Apache Airflow to run scheduled pipelines on a daily basis accounting it to finish before the dashboard needs to be used. In other words, have the pipeline run and complete its execution before 7am.
+
+**If the database needed to be accessed by 100+ people**
+AWS Redshift makes a good candidate to allow clustered and distributed processing of the data without having one process to delay the processing of other requests.
 
 # Author
 

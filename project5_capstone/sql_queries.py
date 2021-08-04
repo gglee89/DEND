@@ -10,7 +10,7 @@ drop_tables = [
     airports_table_drop,
     demographics_table_drop,
     immigrations_table_drop,
-    temperature_table_drop
+    temperatures_table_drop
 ]
 
 #################
@@ -79,8 +79,8 @@ immigrations_table_create = """
     );
 """
 
-temperature_table_create = """
-CREATE TABLE IF NOT EXISTS temperature (
+temperatures_table_create = """
+CREATE TABLE IF NOT EXISTS temperatures (
     timestamp                      DATE,
     average_temperature            FLOAT,
     average_temperature_uncertainty FLOAT,
@@ -95,7 +95,7 @@ create_tables = [
     airports_table_create,
     demographics_table_create,
     immigrations_table_create,
-    temperature_table_create
+    temperatures_table_create
 ]
 
 
@@ -131,8 +131,8 @@ immigrations_table_insert = """
                               %s, %s, %s)
 """
 
-temperature_table_insert = """
-    INSERT INTO temperature (timestamp, average_temperature, average_temperature_uncertainty,
+temperatures_table_insert = """
+    INSERT INTO temperatures (timestamp, average_temperature, average_temperature_uncertainty,
                              city, country, latitude, longitude)
                      VALUES (%s, %s, %s,
                              %s, %s, %s, %s)
