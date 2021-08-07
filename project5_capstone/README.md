@@ -159,25 +159,35 @@ airport_dim | ~5000
 
 # Project write up
 
-#### **Rationaly for the choice of tools and technologies for the project**
+### Rationaly for the choice of tools and technologies for the project
 
 Pandas, numpy, psycopg2 are the python modules used to extract, manipulate, and store the data into POSTGRESQL.
 
 This project's architecture is to structure a **Datawarehouse** given the input data coming from 4 different sources (eg.: Airports in the US by city, Temperatures in the US by city, Demographics in the US by city, and I94 immigration logs in the US)
 
+##### What is a Database SCHEMA?
+
+The database schema is the structure OR blueprint of how the database in constructed. (ie.: A collection of relation schemas)
+
+##### What is a Table SCHEMA?
+
+It is the LOGICAL definition of a table. (ie.: Name of the table, and what the name and type of each column is.)
+
+##### Why STAR SCHEMA?
+
 The decision to design and implement a Datawarehousing system goes along with establishing a relationship between dimension and fact tables in a **Star Schema** as shown below. This type of relationship allows data visualization in the fact table (eg.: I94immigration) through the some combination of the dimensions (eg.: Airports, Demographics, Temperature) allowing what is called a drill-down analysis in which from a general holistic view of the data we can start to dig into the specifics given the conditions specific in the fact table are met in a given dimension table.
 
 ![image](./capstone_ER.png)
 
-#### **How often the data should be update and why**
+### **How often the data should be update and why**
 
 Weekly updates is recommended as it may provide weekly aggregations and reports of the US immigrations status
 
-#### **If the data was increase by 100x**
+### **If the data was increase by 100x**
 
 Storing the data in S3 buckets to save costs, and making use of AWS EMR with Spark to parallelize the processing of files big enough that it consumes most processing resources of the uniquely allocated CPU.
 
-#### **If the data populates a dashboard that must be updated on a daily basis by 7am every day**
+### **If the data populates a dashboard that must be updated on a daily basis by 7am every day**
 
 Use Apache Airflow to run scheduled pipelines on a daily basis accounting it to finish before the dashboard needs to be used. In other words, have the pipeline run and complete its execution before 7am.
 
