@@ -34,12 +34,6 @@ This project intends to demonstrate the combination of knowledge gained througho
      - If the pipelines were run on a daily basis by 7am.
      - If the database needed to be accessed by 100+ people.
 
-# Research questions
-
-1. What are the top 10 airports where immigration into the US went through?
-2. What are the top 10 cities in the US with most immigrants?
-3. What are the temperature of the top 10 cities with most immigrants?
-
 # Data source
 
 - **I94 Immigration data**
@@ -144,27 +138,55 @@ README.md                 # Documentation
 | fltno     | Flight number or Airline used to arrive in the US                                     |
 | visatype  | Class of admission legally admitting the non-immigrant to temporarily stay in the US  |
 
-#
+# Example of research questions
+
+1. What are the top 10 airports where immigration into the US went through?
+2. What are the top 10 cities in the US with most immigrants?
+3. What are the temperature of the top 10 cities with most immigrants?
+
+# Example results
+
+**Limitation (needs to be done in the future):**  
+Uploading the data source (eg.: I94 Immigration, US Temperature, US Demographics, and US Airports) onto AWS Redshift took on average 500 rows/minute, which made it difficult to get ALL the data populated onto Redshift tables due TIME CONSTRAINTS of having to finish my Nanodegree Capstone project.
+
+**Data uploaded onto AWS Redshift were as follows:**  
+table | count (rows)
+--- | ---
+immigration_fact | ~14000
+temperature_dim | ~12000
+demographic_dim | ~5000
+airport_dim | ~5000
 
 # Project write up
 
-**Rationaly for the choice of tools and technologies for the project**
-Pandas, numpy, psycopg2 are the python modules used to extract, manipulate, and store the data into POSTGRESQL
+#### **Rationaly for the choice of tools and technologies for the project**
 
-**How often the data should be update and why**
+Pandas, numpy, psycopg2 are the python modules used to extract, manipulate, and store the data into POSTGRESQL.
+
+This project's architecture is to structure a **Datawarehouse** given the input data coming from 4 different sources (eg.: Airports in the US by city, Temperatures in the US by city, Demographics in the US by city, and I94 immigration logs in the US)
+
+The decision to design and implement a Datawarehousing system goes along with establishing a relationship between dimension and fact tables in a **Star Schema** as shown below. This type of relationship allows data visualization in the fact table (eg.: I94immigration) through the some combination of the dimensions (eg.: Airports, Demographics, Temperature) allowing what is called a drill-down analysis in which from a general holistic view of the data we can start to dig into the specifics given the conditions specific in the fact table are met in a given dimension table.
+
+![image](./capstone_ER.png)
+
+#### **How often the data should be update and why**
+
 Weekly updates is recommended as it may provide weekly aggregations and reports of the US immigrations status
 
-**If the data was increase by 100x**
+#### **If the data was increase by 100x**
+
 Storing the data in S3 buckets to save costs, and making use of AWS EMR with Spark to parallelize the processing of files big enough that it consumes most processing resources of the uniquely allocated CPU.
 
-**If the data populates a dashboard that must be updated on a daily basis by 7am every day**
+#### **If the data populates a dashboard that must be updated on a daily basis by 7am every day**
+
 Use Apache Airflow to run scheduled pipelines on a daily basis accounting it to finish before the dashboard needs to be used. In other words, have the pipeline run and complete its execution before 7am.
 
-**If the database needed to be accessed by 100+ people**
+#### **If the database needed to be accessed by 100+ people**
+
 AWS Redshift makes a good candidate to allow clustered and distributed processing of the data without having one process to delay the processing of other requests.
 
 # Author
 
-**Giwoo G Lee**
+**Giwoo G Lee**  
 Data Engineer  
 [Linkedin](https://linkedin.com/in/leegiwoo)
